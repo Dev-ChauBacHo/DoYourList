@@ -1,0 +1,2 @@
+rootProject.name = "DoYourList2"
+include ':app'
