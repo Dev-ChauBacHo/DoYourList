@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,7 +42,7 @@ public class RecyclerViewTaskAdapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Task task = taskList.get(position);
-        holder.radioButton.setChecked(task.isCompleted());
+        holder.checkBox.setChecked(task.isCompleted());
         holder.name.setText(task.getName());
         holder.date.setText(task.getDate());
         holder.time.setText(task.getTime());
@@ -63,10 +63,12 @@ public class RecyclerViewTaskAdapter
             }
         });
 
-        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Handle when checked
+                Log.d(TAG, "onClick: RadioButton clicked");
+                task.setCompleted(holder.checkBox.isChecked());
+                taskListener.updateTaskStatus(task);
             }
         });
     }
@@ -82,13 +84,13 @@ public class RecyclerViewTaskAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private RadioButton radioButton;
+        private CheckBox checkBox;
         private TextView name, date, time;
         private ItemClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            radioButton = itemView.findViewById(R.id.radio_button_complete);
+            checkBox = itemView.findViewById(R.id.check_box_complete);
             name = itemView.findViewById(R.id.text_view_task_name);
             date = itemView.findViewById(R.id.text_view_task_date);
             time = itemView.findViewById(R.id.text_view_task_time);

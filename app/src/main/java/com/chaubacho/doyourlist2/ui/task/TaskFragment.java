@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -42,9 +44,16 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
     private RecyclerViewTaskAdapter adapter;
     private TaskListener context;
     private String projectID;
+    private int CURRENT_TASK_STATUS;
 
     public TaskFragment() {
         // Required empty public constructor
+    }
+
+    public TaskFragment(TaskListener context, String projectID, int CURRENT_TASK_STATUS) {
+        this.context = context;
+        this.projectID = projectID;
+        this.CURRENT_TASK_STATUS = CURRENT_TASK_STATUS;
     }
 
     public TaskFragment(TaskListener context, String projectID) {
@@ -71,7 +80,8 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
 
         adapter = new RecyclerViewTaskAdapter(taskList);
 
-        getDataFromFirebase();
+//        getDataFromFirebase();
+        showTaskOptions(CURRENT_TASK_STATUS);
 
         adapter.setTaskListener(context);
         binding.recyclerViewTasks.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
@@ -84,6 +94,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
         Log.d(TAG, "getDataFromFirebase: called " + projectID);
         CollectionReference collection = getCollection();
         collection
+                .orderBy("isCompleted", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -104,6 +115,10 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
                                 if (data.get("date") != null)
                                     newTask.setDate(data.get("date").toString());
                                 taskList.add(newTask);
+                            }
+                            if (CURRENT_TASK_STATUS == Value.HIDE_COMPLETED_TASK) {
+                                Log.d(TAG, "showTaskOptions: Hide. TaskList size = " + taskList.size());
+                                taskList.removeIf(Task::isCompleted);
                             }
                             adapter.notifyDataSetChanged();
                         } else {
@@ -149,13 +164,19 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
 
         Map<String, Object> data = buildData(task);
 
-        collection.document(task.getId())
+        collection
+                .document(task.getId())
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(((MainActivity) context).getBaseContext(), "Updated!", Toast.LENGTH_SHORT).show();
-                        ((MainActivity)context).getSupportFragmentManager().popBackStack();
+                        FragmentManager manager = ((MainActivity) context).getSupportFragmentManager();
+                        if (manager.findFragmentByTag("task") != null && manager.findFragmentByTag("task").isVisible()) {
+
+                        } else {
+                            manager.popBackStack();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -180,7 +201,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(((MainActivity) context).getBaseContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-                        ((MainActivity)context).getSupportFragmentManager().popBackStack();
+                        ((MainActivity) context).getSupportFragmentManager().popBackStack();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -197,9 +218,9 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
 
     }
 
-    public void refresh() {
-        getDataFromFirebase();
-    }
+//    public void refresh() {
+//        getDataFromFirebase();
+//    }
 
     private CollectionReference getCollection() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -212,7 +233,6 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
     }
 
     private Map<String, Object> buildData(Task task) {
-
         Map<String, Object> data = new HashMap<>();
         data.put("name", task.getName());
         data.put("isCompleted", task.isCompleted());
@@ -221,5 +241,11 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
         if (task.getTime() != null)
             data.put("time", task.getTime());
         return data;
+    }
+
+    public void showTaskOptions(int code) {
+        CURRENT_TASK_STATUS = code;
+        Log.d(TAG, "showTaskOptions: Called with code = " + code);
+        getDataFromFirebase();
     }
 }

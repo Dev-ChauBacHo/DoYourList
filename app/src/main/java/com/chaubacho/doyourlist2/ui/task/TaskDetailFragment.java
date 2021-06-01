@@ -67,7 +67,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             binding.buttonDeleteTask.setEnabled(true);
             binding.buttonDeleteTask.setBackgroundColor(Color.RED);
         } else {
-            binding.radioButtonTaskDetailComplete.setEnabled(false);
+            binding.checkBoxTaskDetailComplete.setEnabled(false);
             binding.buttonAddTask.setEnabled(true);
         }
 
@@ -78,7 +78,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         binding.buttonUpdateTask.setOnClickListener(this);
         binding.buttonAddTask.setOnClickListener(this);
         binding.buttonDeleteTask.setOnClickListener(this);
-        binding.radioButtonTaskDetailComplete.setOnClickListener(this);
     }
 
     @Override
@@ -128,6 +127,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             else
                 task.setTime("");
 
+            task.setCompleted(binding.checkBoxTaskDetailComplete.isChecked());
             task.setName(name);
             context.updateItem(task);
         } else if (v == binding.buttonDeleteTask) {

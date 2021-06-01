@@ -5,5 +5,8 @@
         android:title="Log out"/>
     <item android:id="@+id/menu_sync"
         android:title="Sync"/>
+    <item android:id="@+id/menu_show_completed_task"
+        android:title="Show/Hide done Tasks"
+        android:visible="false"/>
 
 </menu>

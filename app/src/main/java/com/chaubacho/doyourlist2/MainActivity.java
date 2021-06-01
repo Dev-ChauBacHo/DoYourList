@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
     private String projectId;
+    private Menu mainMenu;
+    private int CURRENT_TASK_STATUS = Value.SHOW_COMPLETED_TASK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        mainMenu = menu;
         return true;
     }
 
@@ -69,9 +72,24 @@ public class MainActivity extends AppCompatActivity
                 }
                 TaskFragment taskFragment = findTaskFragment();
                 if (taskFragment != null) {
-                    taskFragment.refresh();
+                    taskFragment.showTaskOptions(CURRENT_TASK_STATUS);
                 }
                 return true;
+            case R.id.menu_show_completed_task:
+                TaskFragment taskFragment1 = findTaskFragment();
+                if (taskFragment1 != null) {
+                    if (CURRENT_TASK_STATUS == Value.HIDE_COMPLETED_TASK) {
+                        Log.d(TAG, "onOptionsItemSelected: Options Show task");
+                        CURRENT_TASK_STATUS = Value.SHOW_COMPLETED_TASK;
+                    } else {
+                        Log.d(TAG, "onOptionsItemSelected: Options Hide task");
+                        CURRENT_TASK_STATUS = Value.HIDE_COMPLETED_TASK;
+                    }
+                    taskFragment1.showTaskOptions(CURRENT_TASK_STATUS);
+                    return true;
+                }
+                return false;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -107,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     public void openTaskFragment(String id) {
         projectId = id;
         Log.d(TAG, "openTaskFragment: opening TaskFragment = " + projectId);
-        TaskFragment taskFragment = new TaskFragment(this, projectId);
+        TaskFragment taskFragment = new TaskFragment(this, projectId, CURRENT_TASK_STATUS);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -120,13 +138,16 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.frame_container, taskFragment, "task")
                 .addToBackStack("task")
                 .commit();
+        mainMenu.findItem(R.id.menu_show_completed_task).setVisible(true);
     }
 
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().popBackStack();
-        if (findTaskFragment() != null)
+        if (findTaskFragment() != null) {
+            mainMenu.findItem(R.id.menu_show_completed_task).setVisible(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     @Override
@@ -145,6 +166,15 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.frame_container, taskFragment, "task_detail")
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void updateTaskStatus(Task task) {
+        TaskFragment fragment = findTaskFragment();
+        if (fragment != null) {
+            fragment.updateDataToFirebase(task);
+            fragment.showTaskOptions(CURRENT_TASK_STATUS);
+        }
     }
 
     @Override

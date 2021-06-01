@@ -13,8 +13,8 @@
         android:orientation="horizontal"
         android:background="@drawable/border_project_item">
 
-        <RadioButton
-            android:id="@+id/radio_button_task_detail_complete"
+        <CheckBox
+            android:id="@+id/check_box_task_detail_complete"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="15dp"
