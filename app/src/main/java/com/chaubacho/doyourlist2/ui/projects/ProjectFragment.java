@@ -39,6 +39,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
     private static final String USER_EMAIL = "USER EMAIL";
     private FragmentProjectBinding binding;
     private List<Project> projectList;
+    private List<Project> tempList;
     private RecyclerViewProjectAdapter adapter;
 //    private ProjectListener context;
 
@@ -66,6 +67,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         projectList = new ArrayList<>();
+        tempList = new ArrayList<>();
 
         getDataFromFirebase();
 
@@ -97,6 +99,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
                                 }
                             }
 //                            Toast.makeText(getContext(), "Fetched all data", Toast.LENGTH_SHORT).show();
+                            tempList.addAll(projectList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.e(TAG, "onComplete: " + task.getException());
@@ -214,5 +217,21 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
                 .document(Value.USER_EMAIL)
                 .collection("project");
         return collection;
+    }
+
+    public void findByName(String name) {
+        Log.d(TAG, "findByName: name = " + name);
+        projectList.clear();
+        if (name.isEmpty()) {
+            projectList.addAll(tempList);
+            return;
+        }
+        for (Project p: tempList) {
+            if (p.getName().contains(name))
+                projectList.add(p);
+        }
+        Log.d(TAG, "findByName: size= " + projectList.size());
+//        adapter = new RecyclerViewProjectAdapter(projectList);
+        adapter.notifyDataSetChanged();
     }
 }

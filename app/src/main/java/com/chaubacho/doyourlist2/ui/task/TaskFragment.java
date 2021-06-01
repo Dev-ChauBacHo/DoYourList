@@ -41,6 +41,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
     private static final String TAG = "TaskFragment";
     private FragmentTaskBinding binding;
     private List<Task> taskList;
+    private List<Task> tempList;
     private RecyclerViewTaskAdapter adapter;
     private TaskListener context;
     private String projectID;
@@ -77,6 +78,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         taskList = new ArrayList<>();
+        tempList = new ArrayList<>();
 
         adapter = new RecyclerViewTaskAdapter(taskList);
 
@@ -120,6 +122,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
                                 Log.d(TAG, "showTaskOptions: Hide. TaskList size = " + taskList.size());
                                 taskList.removeIf(Task::isCompleted);
                             }
+                            tempList.addAll(taskList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.e(TAG, "onComplete: " + task.getException());
@@ -247,5 +250,21 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
         CURRENT_TASK_STATUS = code;
         Log.d(TAG, "showTaskOptions: Called with code = " + code);
         getDataFromFirebase();
+    }
+
+    public void findByName(String name) {
+        Log.d(TAG, "findByName: name = " + name);
+        taskList.clear();
+        if (name.isEmpty() || name.length() == 0 || name == null) {
+            taskList.addAll(tempList);
+            return;
+        }
+        for (Task t: tempList) {
+            if (t.getName().contains(name))
+                taskList.add(t);
+        }
+        Log.d(TAG, "findByName: size= " + taskList.size());
+//        adapter = new RecyclerViewProjectAdapter(projectList);
+        adapter.notifyDataSetChanged();
     }
 }

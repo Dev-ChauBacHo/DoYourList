@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.chaubacho.doyourlist2.control.IUpdateItem;
 import com.chaubacho.doyourlist2.control.ProjectListener;
@@ -52,6 +53,28 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         mainMenu = menu;
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String name) {
+                Log.d(TAG, "onQueryTextChange: Searching...");
+                ProjectFragment fragment = findProjectFragment();
+                if (fragment != null) {
+                    fragment.findByName(name);
+                }
+                TaskFragment taskFragment = findTaskFragment();
+                if (taskFragment != null) {
+                    taskFragment.findByName(name);
+                }
+                return true;
+            }
+        });
         return true;
     }
 
