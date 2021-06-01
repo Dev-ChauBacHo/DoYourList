@@ -8,25 +8,25 @@
 
     <EditText
         android:inputType="textEmailAddress"
-        android:id="@+id/txt_email"
+        android:id="@+id/edit_text_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/txt_pass"
+        android:id="@+id/edit_text_password"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/btn_signin"
+        android:id="@+id/button_loggin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign in"
         android:layout_gravity="center"/>
 
     <Button
-        android:id="@+id/btn_signup"
+        android:id="@+id/button_logup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign up"

@@ -1,6 +1,7 @@
 package com.chaubacho.doyourlist2.data.model;
 
-public class Project {
+public class Project implements Item {
+    private String id;
     private String color;
     private String name;
 
@@ -9,9 +10,23 @@ public class Project {
         this.name = name;
     }
 
+    public Project(String id, String color, String name) {
+        this.id = id;
+        this.color = color;
+        this.name = name;
+    }
+
     public Project(String color, String name) {
         this.color = color;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

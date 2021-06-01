@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.projects.AddUpdateProjectFragment"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/border_project_item">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border_project_item"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp">
+        <TextView
+            android:text="Project name: "
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:layout_gravity="center"/>
+        <EditText
+            android:id="@+id/edit_text_project_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Name is unique"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border_project_item"
+        android:padding="5dp">
+        <TextView
+            android:text="Color: "
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp">
+        <Button
+            android:id="@+id/button_update_project"
+            android:text="Update"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:enabled="false"/>
+        <Button
+            android:id="@+id/button_add_project"
+            android:text="ADD"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"/>
+        <Button
+            android:id="@+id/button_delete_project"
+            android:text="Delete"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:enabled="false"/>
+    </LinearLayout>
+
+</LinearLayout>

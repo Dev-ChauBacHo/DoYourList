@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaubacho.doyourlist2.MainActivity;
 import com.chaubacho.doyourlist2.R;
-import com.chaubacho.doyourlist2.control.ItemTaskListener;
+import com.chaubacho.doyourlist2.control.ItemClickListener;
 import com.chaubacho.doyourlist2.control.TaskListener;
 import com.chaubacho.doyourlist2.data.model.Task;
 
@@ -47,13 +47,26 @@ public class RecyclerViewTaskAdapter
         holder.date.setText(task.getDate());
         holder.time.setText(task.getTime());
 
-        holder.setClickListener(new ItemTaskListener() {
+        holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClickListener(int position, View v) {
                 Log.d(TAG, "onClickListener: clicked");
                 if (taskListener instanceof MainActivity) {
-                    taskListener.openTaskDetailFragment(task.getName());
+                    taskListener.openTaskDetailFragment(task);
                 }
+            }
+
+            @Override
+            public void onLongClickListener(int position, View v) {
+                Log.d(TAG, "onLongClickListener: clicked");
+                // TODO Handle Long click
+            }
+        });
+
+        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Handle when checked
             }
         });
     }
@@ -68,10 +81,10 @@ public class RecyclerViewTaskAdapter
         this.taskListener = taskListener;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private RadioButton radioButton;
         private TextView name, date, time;
-        private ItemTaskListener clickListener;
+        private ItemClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,10 +93,10 @@ public class RecyclerViewTaskAdapter
             date = itemView.findViewById(R.id.text_view_task_date);
             time = itemView.findViewById(R.id.text_view_task_time);
             itemView.setOnClickListener(this);
-
+            itemView.setOnLongClickListener(this);
         }
 
-        public void setClickListener(ItemTaskListener listener) {
+        public void setClickListener(ItemClickListener listener) {
             this.clickListener = listener;
         }
 
@@ -91,6 +104,13 @@ public class RecyclerViewTaskAdapter
         public void onClick(View v) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
             clickListener.onClickListener(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Log.d(TAG, "onLongClick: " + getAdapterPosition());
+            clickListener.onLongClickListener(getAdapterPosition(), v);
+            return true;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.chaubacho.doyourlist2.data.model;
 
-public class Task {
+public class Task implements Item {
+    private String id;
     private String name;
     private boolean isCompleted;
     private String date;
@@ -17,14 +18,24 @@ public class Task {
     public Task() {
     }
 
+
+
     public Task(String name) {
         this.name = name;
 
     }
 
-    public Task(String name, String date) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Task(String id, String name) {
+        this.id = id;
         this.name = name;
-        this.date = date;
     }
 
     public Task(String name, String date, String time) {

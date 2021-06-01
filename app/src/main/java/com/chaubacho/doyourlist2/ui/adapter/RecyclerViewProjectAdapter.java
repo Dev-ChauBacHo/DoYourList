@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaubacho.doyourlist2.MainActivity;
 import com.chaubacho.doyourlist2.R;
-import com.chaubacho.doyourlist2.control.ItemProjectListener;
-import com.chaubacho.doyourlist2.control.ProjectListener;
+import com.chaubacho.doyourlist2.control.ItemClickListener;
 import com.chaubacho.doyourlist2.data.model.Project;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -25,7 +24,7 @@ public class RecyclerViewProjectAdapter
     private static final String TAG = "RcvProjectAdapter";
     private List<Project> projectList;
     private Context context;
-    private ProjectListener projectListener;
+//    private ProjectListener projectListener;
 
     public RecyclerViewProjectAdapter(List<Project> projectList) {
         this.projectList = projectList;
@@ -44,18 +43,33 @@ public class RecyclerViewProjectAdapter
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Project project = projectList.get(position);
         holder.name.setText(project.getName());
-        holder.color.setBackgroundColor(Color.parseColor(project.getColor()));
-
-        holder.setClickListener(new ItemProjectListener() {
+        try {
+            holder.color.setBackgroundColor(Color.parseColor(project.getColor()));
+            Log.d(TAG, "onBindViewHolder: color = " + project.getColor() );
+        } catch (Exception e) {
+            Log.e(TAG, "onBindViewHolder: name = " + project.getName() + " color = " + project.getColor() + " " + e );
+        }
+        holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClickListener(int position, View v) {
                 Log.d(TAG, "onClickListener: clicked");
-                if (projectListener instanceof MainActivity) {
+                if (context instanceof MainActivity) {
                     Log.d(TAG, "onClickListener: Project's name = " + project.getName());
-                    projectListener.openTaskFragment(project.getName());
+                    ((MainActivity) context).openTaskFragment(project.getId());
+                }
+            }
+
+            @Override
+            public void onLongClickListener(int position, View v) {
+                Log.d(TAG, "onLongClickListener: clicked");
+                if (context instanceof MainActivity) {
+                    Log.d(TAG, "onClickListener: Project's name = " + project.getName());
+                    Log.d(TAG, "onLongClickListener: Project's id = " + project.getId());
+                    ((MainActivity) context).openUpdateProjectView(project);
                 }
             }
         });
+
     }
 
     @Override
@@ -63,25 +77,25 @@ public class RecyclerViewProjectAdapter
         return projectList == null ? 0 : projectList.size();
     }
 
-    public void setProjectListener(ProjectListener projectListener) {
-        Log.d(TAG, "setProjectListener: set!!!");
-        this.projectListener = projectListener;
-    }
+//    public void setProjectListener(ProjectListener projectListener) {
+//        Log.d(TAG, "setProjectListener: set!!!");
+//        this.projectListener = projectListener;
+//    }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private ShapeableImageView color;
         private TextView name;
-        private ItemProjectListener clickListener;
+        private ItemClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             color = itemView.findViewById(R.id.image_project);
             name = itemView.findViewById(R.id.text_view_project_name);
             itemView.setOnClickListener(this);
-
+            itemView.setOnLongClickListener(this);
         }
 
-        public void setClickListener(ItemProjectListener listener) {
+        public void setClickListener(ItemClickListener listener) {
             this.clickListener = listener;
         }
 
@@ -89,6 +103,13 @@ public class RecyclerViewProjectAdapter
         public void onClick(View v) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
             clickListener.onClickListener(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Log.d(TAG, "onLongClick: " + getAdapterPosition());
+            clickListener.onLongClickListener(getAdapterPosition(), v);
+            return true;
         }
     }
 

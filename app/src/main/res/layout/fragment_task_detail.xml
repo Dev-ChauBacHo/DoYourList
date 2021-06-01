@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/border_project_item"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border_project_item">
+
+        <RadioButton
+            android:id="@+id/radio_button_task_detail_complete"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="15dp"/>
+
+        <EditText
+            android:id="@+id/edit_text_task_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="25sp"
+            tools:text="Tran Dinh Vinh Tran Dinh Vinh"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_task_choose_date"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:textSize="10sp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/teal_700"
+            android:text="@string/choose_date"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/button_delete_date"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="No date"
+            android:backgroundTint="#835B5B"
+            android:textSize="10sp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_task_choose_time"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:text="@string/choose_time"
+            android:textSize="10sp"
+            android:layout_marginEnd="10dp"/>
+        <Button
+            android:id="@+id/button_delete_time"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="No time"
+            android:backgroundTint="#835B5B"
+            android:textSize="10sp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+        <Button
+            android:id="@+id/button_update_task"
+            android:text="Update"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:enabled="false"/>
+        <Button
+            android:id="@+id/button_add_task"
+            android:text="ADD"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"/>
+        <Button
+            android:id="@+id/button_delete_task"
+            android:text="Delete"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:enabled="false"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

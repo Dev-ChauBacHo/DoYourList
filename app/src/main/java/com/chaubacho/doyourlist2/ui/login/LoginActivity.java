@@ -31,10 +31,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = findViewById(R.id.txt_email);
-        password = findViewById(R.id.txt_pass);
-        btnLogin = findViewById(R.id.btn_signin);
-        btnSignup = findViewById(R.id.btn_signup);
+        email = findViewById(R.id.edit_text_email);
+        password = findViewById(R.id.edit_text_password);
+        btnLogin = findViewById(R.id.button_loggin);
+        btnSignup = findViewById(R.id.button_logup);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,9 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "OKKKKK", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Register successfully!", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(LoginActivity.this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Something is wrong", Toast.LENGTH_LONG).show();
                         }
                     }
                 })
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
-                            Toast.makeText(LoginActivity.this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Something is wrong", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "onComplete: " + task.getException());
                         }
                     }
