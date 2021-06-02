@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DoYourList2</string>
+    <string name="app_name">DoYourList</string>
     <string name="choose_date">CHOOSE DATE</string>
     <string name="choose_time">CHOOSE TIME</string>
 </resources>

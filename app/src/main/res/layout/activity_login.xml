@@ -16,9 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Loggin"
+        android:text="Welcome"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/edit_text_email"
@@ -31,7 +31,7 @@
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="10dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textColorHint="#FFFFFF"
         android:textSize="20sp" />
 
@@ -46,7 +46,7 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:padding="10dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textColorHint="#FFFFFF"
         android:textSize="20sp" />
 
@@ -59,7 +59,7 @@
         android:layout_marginRight="20dp"
         android:background="@color/et"
         android:text="Signin"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textColorHint="#FFFFFF"
         android:textSize="18sp" />
 
@@ -72,7 +72,7 @@
         android:layout_marginRight="20dp"
         android:background="@color/et"
         android:text="New to DoYourList? Signup!"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textColorHint="#FFFFFF"
         android:textSize="18sp" />
 

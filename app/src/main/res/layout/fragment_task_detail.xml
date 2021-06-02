@@ -55,7 +55,7 @@
             android:id="@+id/button_delete_date"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="No date"
+            android:text="delete date"
             android:backgroundTint="#835B5B"
             android:textSize="10sp"
             android:layout_gravity="center"/>
@@ -78,10 +78,32 @@
             android:id="@+id/button_delete_time"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="No time"
+            android:text="delete time"
             android:backgroundTint="#835B5B"
             android:textSize="10sp"
             android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:text="Set a reminder:"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginEnd="10dp"/>
+        <Button
+            android:id="@+id/button_task_set_reminder"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Remind me!"
+            android:textSize="10sp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="#A313A0"/>
     </LinearLayout>
 
     <LinearLayout

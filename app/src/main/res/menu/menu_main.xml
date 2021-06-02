@@ -16,4 +16,6 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
 
+<!--    TODO create menu for setting notify -->
+
 </menu>

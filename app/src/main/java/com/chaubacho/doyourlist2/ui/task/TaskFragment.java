@@ -104,6 +104,7 @@ public class TaskFragment extends Fragment implements IUpdateFirebase {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: successful get Data: " + task.getResult().size());
                             taskList.clear();
+                            tempList.clear();
                             for (QueryDocumentSnapshot doc : task.getResult()) {
                                 Task newTask = new Task();
                                 Map<String, Object> data = doc.getData();

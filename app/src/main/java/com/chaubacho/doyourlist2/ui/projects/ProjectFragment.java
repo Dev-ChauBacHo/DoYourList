@@ -89,6 +89,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: successful" + task.getResult().size());
                             projectList.clear();
+                            tempList.clear();
                             for (QueryDocumentSnapshot doc : task.getResult()) {
                                 if (doc.getData().get("color") != null && doc.getData().get("name") != null) {
                                     projectList.add(new Project(doc.getId(),
@@ -128,8 +129,10 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: add project successful");
                                 Toast.makeText(getContext(), "Added!", Toast.LENGTH_SHORT).show();
-//                                projectList.add(newProject);
-                                getDataFromFirebase();
+                                projectList.add(newProject);
+                                tempList.add(newProject);
+                                adapter.notifyDataSetChanged();
+//                                getDataFromFirebase();
 
                             } else {
                                 Log.e(TAG, "onComplete: Something wrong" + task.getException());
@@ -199,6 +202,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
                     public void onSuccess(Void unused) {
                         Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
                         projectList.remove(project);
+                        tempList.remove(project);
                         adapter.notifyDataSetChanged();
                     }
                 })

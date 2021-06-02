@@ -1,9 +1,14 @@
 package com.chaubacho.doyourlist2.ui.task;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.chaubacho.doyourlist2.MainActivity;
 import com.chaubacho.doyourlist2.R;
 import com.chaubacho.doyourlist2.control.IUpdateItem;
+import com.chaubacho.doyourlist2.control.ReminderBroadcast;
 import com.chaubacho.doyourlist2.data.model.Task;
 import com.chaubacho.doyourlist2.databinding.FragmentTaskDetailBinding;
 
@@ -69,6 +76,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         } else {
             binding.checkBoxTaskDetailComplete.setEnabled(false);
             binding.buttonAddTask.setEnabled(true);
+            binding.buttonTaskSetReminder.setEnabled(false);
         }
 
         binding.buttonTaskChooseDate.setOnClickListener(this);
@@ -78,6 +86,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         binding.buttonUpdateTask.setOnClickListener(this);
         binding.buttonAddTask.setOnClickListener(this);
         binding.buttonDeleteTask.setOnClickListener(this);
+        binding.buttonTaskSetReminder.setOnClickListener(this);
     }
 
     @Override
@@ -132,7 +141,24 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             context.updateItem(task);
         } else if (v == binding.buttonDeleteTask) {
             context.deleteItem(task);
+        } else if (v == binding.buttonTaskSetReminder) {
+            Log.d(TAG, "onClick: Set reminder");
+//            createNotificationChannel();
+            // date, time is not set
+            if (date.equals(getString(R.string.choose_date)) && time.equals(getString(R.string.choose_time))) {
+                Toast.makeText(getContext(), "Date, time can not empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // set time but not set date
+            if (date.equals(getString(R.string.choose_date))) date = buildTodayDate();
+            // set date but not set time
+            if (time.equals(getString(R.string.choose_time))) time = "0:1";
+            createAlarmReminder(date, time);
+            Toast.makeText(getContext(), "Set alarm successful!", Toast.LENGTH_SHORT).show();
         }
+        // TODO alarm should cancel when user add Task but not save
+        // TODO Reminder should change when user update time, date
+        // TODO Reminder should cancel when delete task
     }
 
     private void chooseTime() {
@@ -168,5 +194,36 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         int mMonth = calendar.get(Calendar.MONTH);
         int mYear = calendar.get(Calendar.YEAR);
         return (mDay + "/" + (mMonth + 1) + "/" + mYear);
+    }
+
+    private void createAlarmReminder(String date, String time) {
+        Log.d(TAG, "createAlarmReminder: create alarm");
+        // format: dd/mm/yy  hh:mm
+        String[] date1 = date.split("/");
+        String[] time1 = time.split(":");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Integer.parseInt(date1[2]),
+                Integer.parseInt(date1[1]) - 1,
+                Integer.parseInt(date1[0]),
+                Integer.parseInt(time1[0]),
+                Integer.parseInt(time1[1]));
+        Log.d(TAG, "createAlarmReminder: " + calendar.toString());
+
+        Intent intent = new Intent(getContext(), ReminderBroadcast.class);
+        intent.putExtra("taskName", task.getName());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+                0,
+                intent,
+                0);
+        AlarmManager alarmManager = (AlarmManager)((MainActivity)context)
+                .getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent);
+
     }
 }
