@@ -1,6 +1,7 @@
 package com.chaubacho.doyourlist2.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.chaubacho.doyourlist2.control.ItemClickListener;
 import com.chaubacho.doyourlist2.control.TaskListener;
 import com.chaubacho.doyourlist2.data.model.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RecyclerViewTaskAdapter
@@ -71,6 +75,41 @@ public class RecyclerViewTaskAdapter
                 taskListener.updateTaskStatus(task);
             }
         });
+
+        if (task.getDate() != null && task.getDate().length() != 0) {
+            int compare = compareDate(task.getDate());
+            holder.date.setTextColor(compare);
+            holder.time.setTextColor(compare);
+        }
+    }
+
+    private int compareDate(String date) {
+        String currentDateString = buildCurrentDateTime();
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date remindDate = sdf.parse(date);
+            Date currentDate = sdf.parse(currentDateString);
+            Date diff = new Date(remindDate.getTime() - currentDate.getTime());
+
+            if (diff.getTime() == 0) {          // Reminder is today
+                return Color.BLUE;
+            } else if (diff.getTime() < 0) {    // Reminder date is passed
+                return Color.RED;
+            } else {
+                return Color.BLACK;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Color.BLACK;
+    }
+
+    private String buildCurrentDateTime() {
+        Calendar calendar = Calendar.getInstance();
+        return (calendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                (calendar.get(Calendar.MONTH) + 1) + "/" +
+                calendar.get(Calendar.YEAR));
     }
 
     @Override

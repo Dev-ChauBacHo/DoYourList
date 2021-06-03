@@ -20,12 +20,11 @@ public class ReminderBroadcast extends BroadcastReceiver {
     private static final String CHANNEL_ID = "DoYourList";
     private static final int NOTIFICATION_ID = 201;
     private String projectColor;
-    private String taskName;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: called");
-        taskName = intent.getStringExtra("taskName");
+        String taskName = intent.getStringExtra("taskName");
         int color = Color.RED;
         try {
             color = Color.parseColor(projectColor);
