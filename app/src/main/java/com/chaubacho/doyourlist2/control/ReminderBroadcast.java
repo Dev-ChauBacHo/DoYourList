@@ -36,7 +36,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "Channel",
-                    NotificationManager.IMPORTANCE_HIGH);
+                    NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription("This is notification channel for task");
 
 
@@ -45,7 +45,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.main_icon)
-                .setContentTitle(taskName)
+                .setContentTitle("Friendly Reminder:")
                 .setContentText(taskName)
 //                .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         IUpdateItem {
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
-    private String projectId;
     private Menu mainMenu;
     private int CURRENT_TASK_STATUS = Value.SHOW_COMPLETED_TASK;
 
@@ -146,9 +145,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void openTaskFragment(String id) {
-        projectId = id;
-        Log.d(TAG, "openTaskFragment: opening TaskFragment = " + projectId);
-        TaskFragment taskFragment = new TaskFragment(this, projectId, CURRENT_TASK_STATUS);
+        Value.PROJECT_ID = id;
+        Log.d(TAG, "openTaskFragment: opening TaskFragment = " + id);
+        TaskFragment taskFragment = new TaskFragment(this, id, CURRENT_TASK_STATUS);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -239,7 +238,7 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (item instanceof Task) {
             Log.d(TAG, "addItem: Task:" + ((Task)item).getName());
-            new TaskFragment(this, projectId).addDataToFirebase(item);
+            new TaskFragment(this, Value.PROJECT_ID).addDataToFirebase(item);
         }
     }
 
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity
         } else if (item instanceof Task) {
             Log.d(TAG, "update: Task: name = " + ((Task)item).getName());
             Log.d(TAG, "update: Task: date = " + ((Task)item).getDate());
-            new TaskFragment(this, projectId).updateDataToFirebase(item);
+            new TaskFragment(this, Value.PROJECT_ID).updateDataToFirebase(item);
         }
     }
 
@@ -269,7 +268,7 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (item instanceof Task) {
             Log.d(TAG, "delete: Task:" + ((Task)item).getName());
-            new TaskFragment(this, projectId).deleteDataInFirebase(item);
+            new TaskFragment(this, Value.PROJECT_ID).deleteDataInFirebase(item);
         }
     }
 

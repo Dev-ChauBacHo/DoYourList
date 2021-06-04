@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,24 +17,42 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.chaubacho.doyourlist2.MainActivity;
 import com.chaubacho.doyourlist2.R;
 import com.chaubacho.doyourlist2.control.IUpdateItem;
 import com.chaubacho.doyourlist2.control.ReminderBroadcast;
 import com.chaubacho.doyourlist2.data.model.Task;
+import com.chaubacho.doyourlist2.data.values.Value;
 import com.chaubacho.doyourlist2.databinding.FragmentTaskDetailBinding;
+import com.chaubacho.doyourlist2.ui.adapter.TaskPhotoAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class TaskDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "TaskDetailFragment";
     private FragmentTaskDetailBinding binding;
     private Task task;
     private IUpdateItem context;
+    private StorageReference reference;
+    private TaskPhotoAdapter adapter;
+    private List<Uri> uriImage;
+    private ActivityResultLauncher<String> mGetContent;
 
     public TaskDetailFragment() {
         // Required empty public constructor
@@ -63,12 +82,33 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        reference = FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("user")
+                .child(Value.USER_EMAIL)
+                .child(Value.PROJECT_ID);
+        uriImage = new ArrayList<>();
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        Log.d(TAG, "onActivityResult: receive");
+                        if (uri != null) {
+                            uriImage.add(uri);
+                            binding.textViewTaskPhoto.setText("Added " + uriImage.size() + "photos");
+                        }
+                    }
+
+                });
+
         if (task != null) {
             binding.editTextTaskName.setText(task.getName());
             if (task.getDate().length() > 0)
                 binding.buttonTaskChooseDate.setText(task.getDate());
             if (task.getTime().length() > 0)
-            binding.buttonTaskChooseTime.setText(task.getTime());
+                binding.buttonTaskChooseTime.setText(task.getTime());
 
             binding.buttonUpdateTask.setEnabled(true);
             binding.buttonDeleteTask.setEnabled(true);
@@ -77,6 +117,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             binding.checkBoxTaskDetailComplete.setEnabled(false);
             binding.buttonAddTask.setEnabled(true);
             binding.buttonTaskSetReminder.setEnabled(false);
+            binding.buttonAddPhoto.setVisibility(View.INVISIBLE);
         }
 
         binding.buttonTaskChooseDate.setOnClickListener(this);
@@ -87,6 +128,17 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         binding.buttonAddTask.setOnClickListener(this);
         binding.buttonDeleteTask.setOnClickListener(this);
         binding.buttonTaskSetReminder.setOnClickListener(this);
+        binding.buttonAddPhoto.setOnClickListener(this);
+
+        adapter = new TaskPhotoAdapter();
+        binding.recyclerViewTasksPhoto.setAdapter(adapter);
+        binding.recyclerViewTasksPhoto.setLayoutManager(new GridLayoutManager(getContext(),
+                3));
+
+        if (task != null && task.getId() != null) {
+            downloadImage();
+        }
+
     }
 
     @Override
@@ -132,15 +184,16 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
                 if (date.equals(getString(R.string.choose_date))) {
                     task.setDate(buildTodayDate());
                 }
-            }
-            else
+            } else
                 task.setTime("");
 
             task.setCompleted(binding.checkBoxTaskDetailComplete.isChecked());
             task.setName(name);
             context.updateItem(task);
+            uploadPhotoToFirebase(uriImage);
         } else if (v == binding.buttonDeleteTask) {
             context.deleteItem(task);
+            deletePhotos();
         } else if (v == binding.buttonTaskSetReminder) {
             Log.d(TAG, "onClick: Set reminder");
 //            createNotificationChannel();
@@ -155,10 +208,104 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             if (time.equals(getString(R.string.choose_time))) time = "0:1";
             createAlarmReminder(date, time);
             Toast.makeText(getContext(), "Set alarm successful!", Toast.LENGTH_SHORT).show();
+            // TODO alarm should cancel when user add Task but not save
+            // TODO Reminder should change when user update time, date
+            // TODO Reminder should cancel when delete task
+        } else if (v == binding.buttonAddPhoto) {
+            mGetContent.launch("image/*");
         }
-        // TODO alarm should cancel when user add Task but not save
-        // TODO Reminder should change when user update time, date
-        // TODO Reminder should cancel when delete task
+
+    }
+
+    private void uploadPhotoToFirebase(List<Uri> uriImage) {
+        for (Uri uri : uriImage) {
+            reference
+                    .child(task.getId())
+                    .child(System.currentTimeMillis() + "." + uri.getLastPathSegment())
+                    .putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Log.d(TAG, "onSuccess: Success!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e);
+                        }
+                    });
+        }
+    }
+
+    private void downloadImage() {
+        Log.d(TAG, "downloadImage: starting");
+
+        reference.child(task.getId())
+                .listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        adapter.updateData(listResult.getItems());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "onFailure: " + e);
+                    }
+                });
+    }
+
+    public void deletePhotos() {
+        Log.d(TAG, "deletePhotoItem: ");
+
+        reference.child(task.getId())
+                .listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference reference : listResult.getItems()) {
+                            reference.delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "onSuccess: Delete photos success!");
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e(TAG, "onFailure: Cannot delete" + e);
+                                        }
+                                    });
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "onFailure: " + e);
+                    }
+                });
+
+        reference.child(task.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "onSuccess: Delete photos success!");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "onFailure: Cannot delete" + e);
+                    }
+                });
+
     }
 
     private void chooseTime() {
@@ -208,7 +355,8 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
                 Integer.parseInt(date1[1]) - 1,
                 Integer.parseInt(date1[0]),
                 Integer.parseInt(time1[0]),
-                Integer.parseInt(time1[1]));
+                Integer.parseInt(time1[1]),
+                0);
         Log.d(TAG, "createAlarmReminder: " + calendar.toString());
 
         Intent intent = new Intent(getContext(), ReminderBroadcast.class);
@@ -217,8 +365,8 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
                 0,
                 intent,
-                0);
-        AlarmManager alarmManager = (AlarmManager)((MainActivity)context)
+                PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) ((MainActivity) context)
                 .getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP,

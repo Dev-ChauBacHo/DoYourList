@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,8 +73,7 @@ public class AddUpdateProjectFragment extends DialogFragment implements View.OnC
 
         colorList();
         SpinnerColorAdapter spinnerColorAdapter = new SpinnerColorAdapter((MainActivity) context, colorItems);
-        Spinner spinner = binding.spinnerColor;
-        spinner.setAdapter(spinnerColorAdapter);
+        binding.spinnerColor.setAdapter(spinnerColorAdapter);
         binding.spinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
