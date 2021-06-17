@@ -51,10 +51,12 @@ public class TaskPhotoAdapter extends RecyclerView.Adapter<TaskPhotoAdapter.MyVi
         StorageReference reference = referenceList.get(position);
 
         final long ONE_MEGABYTE = 1024 * 1024;
-        reference.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytesPrm -> {
-            Bitmap bmp = BitmapFactory.decodeByteArray(bytesPrm, 0, bytesPrm.length);
-            holder.imageView.setImageBitmap(bmp);
-        }).addOnFailureListener(new OnFailureListener() {
+        reference
+                .getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(bytesPrm -> {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytesPrm, 0, bytesPrm.length);
+                    holder.imageView.setImageBitmap(bmp);
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 holder.imageView.setImageResource(R.mipmap.ic_launcher);

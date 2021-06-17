@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity
                         R.anim.slide_out  // popExit
                 )
                 .replace(R.id.frame_container, projectFragment, "project")
-//                .addToBackStack(null)
                 .commit();
     }
 
@@ -231,13 +230,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void addItem(Item item) {
         if (item instanceof Project) {
-            Log.d(TAG, "addItem: color = " + ((Project)item).getColor());
+            Log.d(TAG, "addItem: color = " + ((Project) item).getColor());
             ProjectFragment fragment = findProjectFragment();
             if (fragment != null) {
                 fragment.addDataToFirebase(item);
             }
         } else if (item instanceof Task) {
-            Log.d(TAG, "addItem: Task:" + ((Task)item).getName());
+            Log.d(TAG, "addItem: Task:" + ((Task) item).getName());
             new TaskFragment(this, Value.PROJECT_ID).addDataToFirebase(item);
         }
     }
@@ -252,8 +251,8 @@ public class MainActivity extends AppCompatActivity
                 fragment.updateDataToFirebase(item);
             }
         } else if (item instanceof Task) {
-            Log.d(TAG, "update: Task: name = " + ((Task)item).getName());
-            Log.d(TAG, "update: Task: date = " + ((Task)item).getDate());
+            Log.d(TAG, "update: Task: name = " + ((Task) item).getName());
+            Log.d(TAG, "update: Task: date = " + ((Task) item).getDate());
             new TaskFragment(this, Value.PROJECT_ID).updateDataToFirebase(item);
         }
     }
@@ -267,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                 fragment.deleteDataInFirebase((Project) item);
             }
         } else if (item instanceof Task) {
-            Log.d(TAG, "delete: Task:" + ((Task)item).getName());
+            Log.d(TAG, "delete: Task:" + ((Task) item).getName());
             new TaskFragment(this, Value.PROJECT_ID).deleteDataInFirebase(item);
         }
     }
@@ -308,5 +307,4 @@ public class MainActivity extends AppCompatActivity
         }
         return null;
     }
-
 }

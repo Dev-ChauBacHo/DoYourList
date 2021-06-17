@@ -3,13 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity"
     android:gravity="center"
-    android:orientation="vertical">
-
-
-    <!-- thêm trong colors.xml
-       <color name="et">#D32F2F</color> -->
+    android:orientation="vertical"
+    tools:context=".ui.login.LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -76,5 +72,17 @@
         android:textColorHint="#FFFFFF"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/forgetPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/et"
+        android:text="Forgot password"
+        android:textColor="@color/white"
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp" />
 
 </LinearLayout>

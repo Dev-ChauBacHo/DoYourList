@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_logout"
-        android:title="Log out"/>
-    <item android:id="@+id/menu_sync"
-        android:title="Sync"/>
-    <item android:id="@+id/menu_show_completed_task"
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Log out" />
+    <item
+        android:id="@+id/menu_sync"
+        android:title="Sync" />
+    <item
+        android:id="@+id/menu_show_completed_task"
         android:title="Show/Hide done Tasks"
-        android:visible="false"/>
+        android:visible="false" />
     <item
         android:id="@+id/menu_search"
         android:icon="@android:drawable/ic_menu_search"
@@ -16,6 +19,6 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
 
-<!--    TODO create menu for setting notify -->
+    <!--    TODO create menu for setting notify -->
 
 </menu>

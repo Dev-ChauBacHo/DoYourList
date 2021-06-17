@@ -80,7 +80,6 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
     @Override
     public void getDataFromFirebase() {
         Log.d(TAG, "getDataFromFirebase: called " + Value.USER_EMAIL);
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         getCollection()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -174,9 +173,7 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
     public int checkIfNameIsValid(String name, int code) {
         int result = 0;
         for (int i = 0; i < projectList.size(); i++) {
-            if (projectList.get(i).getName().equals(name)) {
-                ++result;
-            }
+            if (projectList.get(i).getName().equals(name)) ++result;
         }
         if (code == Value.ADD_ITEM) {
             return (result == 0) ? Value.PROJECT_NAME_VALID : Value.PROJECT_NAME_INVALID;
@@ -216,11 +213,11 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
     }
 
     private CollectionReference getCollection() {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        CollectionReference collection = firestore.collection("user")
+        return FirebaseFirestore
+                .getInstance()
+                .collection("user")
                 .document(Value.USER_EMAIL)
                 .collection("project");
-        return collection;
     }
 
     public void findByName(String name) {
@@ -230,12 +227,11 @@ public class ProjectFragment extends Fragment implements IUpdateFirebase {
             projectList.addAll(tempList);
             return;
         }
-        for (Project p: tempList) {
+        for (Project p : tempList) {
             if (p.getName().contains(name))
                 projectList.add(p);
         }
         Log.d(TAG, "findByName: size= " + projectList.size());
-//        adapter = new RecyclerViewProjectAdapter(projectList);
         adapter.notifyDataSetChanged();
     }
 }

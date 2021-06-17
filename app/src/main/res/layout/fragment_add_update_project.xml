@@ -3,48 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.projects.AddUpdateProjectFragment"
+    android:background="@drawable/border_project_item"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@drawable/border_project_item">
+    tools:context=".ui.projects.AddUpdateProjectFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/border_project_item"
-        android:padding="5dp"
-        android:layout_marginBottom="5dp">
+        android:orientation="horizontal"
+        android:padding="5dp">
+
         <TextView
-            android:text="Project name: "
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:layout_gravity="center"/>
+            android:text="Project name: "
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/edit_text_project_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:hint="Name is unique"
-            android:textSize="20sp"
-            android:layout_gravity="center"/>
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/border_project_item"
+        android:orientation="horizontal"
         android:padding="5dp">
+
         <TextView
-            android:text="Color: "
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="Color: "
+            android:textSize="20sp" />
+
         <Spinner
             android:id="@+id/spinnerColor"
             android:layout_width="0dp"
@@ -57,32 +61,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp">
+
         <Button
             android:id="@+id/button_update_project"
-            android:text="Update"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="5dp"
-            android:enabled="false"/>
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="Update"
+            android:textSize="12sp" />
+
         <Button
             android:id="@+id/button_add_project"
-            android:text="ADD"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="ADD"
+            android:textSize="12sp" />
+
         <Button
             android:id="@+id/button_delete_project"
-            android:text="Delete"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="5dp"
-            android:enabled="false"/>
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="Delete"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

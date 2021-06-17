@@ -23,7 +23,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.chaubacho.doyourlist2.MainActivity;
 import com.chaubacho.doyourlist2.R;
@@ -132,8 +131,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
 
         adapter = new TaskPhotoAdapter();
         binding.recyclerViewTasksPhoto.setAdapter(adapter);
-        binding.recyclerViewTasksPhoto.setLayoutManager(new GridLayoutManager(getContext(),
-                3));
 
         if (task != null && task.getId() != null) {
             downloadImage();
@@ -214,7 +211,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         } else if (v == binding.buttonAddPhoto) {
             mGetContent.launch("image/*");
         }
-
     }
 
     private void uploadPhotoToFirebase(List<Uri> uriImage) {
@@ -296,7 +292,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "onSuccess: Delete photos success!");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/border_project_item"
     android:layout_margin="5dp"
+    android:background="@drawable/border_project_item"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/border_project_item">
+        android:background="@drawable/border_project_item"
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/check_box_task_detail_complete"
@@ -19,20 +20,20 @@
             android:layout_height="35dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="15dp"/>
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp" />
 
         <EditText
             android:id="@+id/edit_text_task_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:textSize="25sp"
-            tools:text="Tran Dinh Vinh Tran Dinh Vinh"/>
+            tools:text="@tools:sample/full_names" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,20 +46,20 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="85dp"
-            android:textSize="10sp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/teal_700"
             android:text="@string/choose_date"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/button_delete_date"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="delete date"
+            android:layout_gravity="center"
             android:backgroundTint="#835B5B"
-            android:textSize="10sp"
-            android:layout_gravity="center"/>
+            android:text="delete date"
+            android:textSize="10sp" />
 
     </LinearLayout>
 
@@ -66,44 +67,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/button_task_choose_time"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="85dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/choose_time"
-            android:textSize="10sp"
-            android:layout_marginEnd="10dp"/>
+            android:textSize="10sp" />
+
         <Button
             android:id="@+id/button_delete_time"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="delete time"
+            android:layout_gravity="center"
             android:backgroundTint="#835B5B"
-            android:textSize="10sp"
-            android:layout_gravity="center"/>
+            android:text="delete time"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="85dp"
+            android:layout_marginEnd="10dp"
             android:text="Set a reminder:"
             android:textColor="@color/black"
-            android:textSize="15sp"
-            android:layout_marginEnd="10dp"/>
+            android:textSize="15sp" />
+
         <Button
             android:id="@+id/button_task_set_reminder"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="Remind me!"
-            android:textSize="10sp"
             android:layout_marginEnd="10dp"
-            android:backgroundTint="#A313A0"/>
+            android:backgroundTint="#A313A0"
+            android:text="Remind me!"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -111,32 +116,35 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:padding="5dp">
+
         <Button
             android:id="@+id/button_update_task"
-            android:text="Update"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="5dp"
-            android:enabled="false"/>
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="Update"
+            android:textSize="12sp" />
+
         <Button
             android:id="@+id/button_add_task"
-            android:text="ADD"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="ADD"
+            android:textSize="12sp" />
+
         <Button
             android:id="@+id/button_delete_task"
-            android:text="Delete"
-            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="5dp"
-            android:enabled="false"/>
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="Delete"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -149,18 +157,21 @@
             android:id="@+id/button_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="add photo"/>
+            android:text="add photo" />
+
         <TextView
             android:id="@+id/text_view_task_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_tasks_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_photo" />
 
 </LinearLayout>

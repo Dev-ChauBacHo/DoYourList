@@ -2,36 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_project_item"
     android:layout_margin="5dp"
-    >
+    android:background="@drawable/border_project_item"
+    android:orientation="horizontal">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_project"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        app:shapeAppearanceOverlay="@style/roundedImageView"
-        android:background="@android:color/transparent"
+        android:layout_gravity="center"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="15dp"
-        android:layout_gravity="center"/>
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        app:shapeAppearanceOverlay="@style/roundedImageView" />
 
     <TextView
         android:id="@+id/text_view_project_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tool:text="A Projectttttttttttttttttttttttttttttttttasaf sdfasdf"
+        android:layout_gravity="center"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
         android:textSize="20sp"
-        android:layout_gravity="center"/>
+        tool:text="@tools:sample/lorem" />
 
 </LinearLayout>
